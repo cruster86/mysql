@@ -1,5 +1,12 @@
 ## Configuration
 
+By default a random password will be generated for the root user. If you'd like to set your own password change the mysqlRootPassword
+in the values.yaml.
+
+You can retrieve your root password by running the following command. Make sure to replace [YOUR_RELEASE_NAME]:
+
+    printf $(printf '\%o' `kubectl get secret [YOUR_RELEASE_NAME]-mysql -o jsonpath="{.data.mysql-root-password[*]}"`)
+
 The following table lists the configurable parameters of the MySQL chart and their default values.
 
 | Parameter                                    | Description                                                                                  | Default                                              |
