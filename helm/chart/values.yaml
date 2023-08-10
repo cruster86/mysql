@@ -12,7 +12,7 @@ busybox:
   tag: "1.32"
 
 testFramework:
-  enabled: true
+  enabled: false
   image: "registry.sirius.online/infra/mysql/bats"
   tag: "1.2.1"
   imagePullPolicy: IfNotPresent
