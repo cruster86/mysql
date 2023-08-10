@@ -1,19 +1,19 @@
 ## mysql image version
 ## ref: https://hub.docker.com/r/library/mysql/tags/
 ##
-image: "mysql"
+image: "registry.sirius.online/infra/mysql"
 imageTag: "5.7.30"
 
 strategy:
   type: Recreate
 
 busybox:
-  image: "busybox"
+  image: "registry.sirius.online/infra/mysql/busybox"
   tag: "1.32"
 
 testFramework:
   enabled: true
-  image: "bats/bats"
+  image: "registry.sirius.online/infra/mysql/bats"
   tag: "1.2.1"
   imagePullPolicy: IfNotPresent
   securityContext: {}
@@ -79,12 +79,24 @@ nodeSelector: {}
 
 ## Affinity
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kube-postgres-ci-1
 
 ## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: []
+tolerations:
+- effect: NoSchedule
+  key: node-role
+  operator: Equal
+  value: postgres
 
 livenessProbe:
   initialDelaySeconds: 30
@@ -110,9 +122,9 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass: "local-storage-mysql"
   accessMode: ReadWriteOnce
-  size: 8Gi
+  size: 20Gi
   annotations: {}
 
 ## Use an alternate scheduler, e.g. "stork".
@@ -189,7 +201,7 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   type: ClusterIP
   port: 3306
-  # nodePort: 32000
+  nodePort: 32306
   # loadBalancerIP:
 
 ## Pods Service Account
@@ -236,7 +248,6 @@ podLabels: {}
 
 ## Set pod priorityClassName
 # priorityClassName: {}
-
 
 ## Init container resources defaults
 initContainer:

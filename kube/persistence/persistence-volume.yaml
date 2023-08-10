@@ -20,3 +20,4 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage-mysql
   volumeMode: Filesystem
+  
