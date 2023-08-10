@@ -1,0 +1,22 @@
+stages:
+  - deploy
+
+##############   MYSQL  #############
+
+mysql:
+  stage: deploy
+  before_script:
+    - kubectl get ns mysql || kubectl create ns mysql
+  script:
+    - chmod +x helm/scripts/helm_deploy_and_wait.sh
+    - RELEASE_NAME="mysql"
+      NAMESPACE="mysql"
+      CHART="helm/chart/"
+      HELM_ARGS="
+      -f helm/chart/values.yaml
+      --debug
+      --dey-run"
+      helm/scripts/helm_deploy_and_wait.sh
+  when: manual
+  tags:
+    - kube-ci
