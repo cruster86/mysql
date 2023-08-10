@@ -85,26 +85,6 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `deploymentAnnotations`		       | Map of annotations for deployment							      | `{}`						     |
 | `strategy`                                   | Update strategy policy                                                                       | `{type: "Recreate"}`                                 |
 
-Some of the parameters above map to the env variables defined in the [MySQL DockerHub image](https://hub.docker.com/_/mysql/).
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```bash
-$ helm install --name my-release \
-  --set mysqlRootPassword=secretpassword,mysqlUser=my-user,mysqlPassword=my-password,mysqlDatabase=my-database \
-    stable/mysql
-```
-
-The above command sets the MySQL `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
-
-```bash
-$ helm install --name my-release -f values.yaml stable/mysql
-```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
 ## Persistence
 
 The [MySQL](https://hub.docker.com/_/mysql/) image stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
@@ -144,61 +124,4 @@ initializationFiles:
     CREATE DATABASE IF NOT EXISTS first DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
   second-db.sql: |-
     CREATE DATABASE IF NOT EXISTS second DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-```
-
-## SSL
-
-This chart supports configuring MySQL to use [encrypted connections](https://dev.mysql.com/doc/refman/5.7/en/encrypted-connections.html) with TLS/SSL certificates provided by the user. This is accomplished by storing the required Certificate Authority file, the server public key certificate, and the server private key as a Kubernetes secret. The SSL options for this chart support the following use cases:
-
-* Manage certificate secrets with helm
-* Manage certificate secrets outside of helm
-
-## Manage certificate secrets with helm
-
-Include your certificate data in the `ssl.certificates` section. For example:
-
-```
-ssl:
-  enabled: false
-  secret: mysql-ssl-certs
-  certificates:
-  - name: mysql-ssl-certs
-    ca: |-
-      -----BEGIN CERTIFICATE-----
-      ...
-      -----END CERTIFICATE-----
-    cert: |-
-      -----BEGIN CERTIFICATE-----
-      ...
-      -----END CERTIFICATE-----
-    key: |-
-      -----BEGIN RSA PRIVATE KEY-----
-      ...
-      -----END RSA PRIVATE KEY-----
-```
-
-> **Note**: Make sure your certificate data has the correct formatting in the values file.
-
-## Manage certificate secrets outside of helm
-
-1. Ensure the certificate secret exist before installation of this chart.
-2. Set the name of the certificate secret in `ssl.secret`.
-3. Make sure there are no entries underneath `ssl.certificates`.
-
-To manually create the certificate secret from local files you can execute:
-```
-kubectl create secret generic mysql-ssl-certs \
-  --from-file=ca.pem=./ssl/certificate-authority.pem \
-  --from-file=server-cert.pem=./ssl/server-public-key.pem \
-  --from-file=server-key.pem=./ssl/server-private-key.pem
-```
-> **Note**: `ca.pem`, `server-cert.pem`, and `server-key.pem` **must** be used as the key names in this generic secret.
-
-If you are using a certificate your configurationFiles must include the three ssl lines under [mysqld]
-
-```
-[mysqld]
-    ssl-ca=/ssl/ca.pem
-    ssl-cert=/ssl/server-cert.pem
-    ssl-key=/ssl/server-key.pem
 ```
