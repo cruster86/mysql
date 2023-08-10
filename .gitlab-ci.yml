@@ -15,7 +15,7 @@ mysql:
       HELM_ARGS="
       -f helm/chart/values.yaml
       --debug
-      --dey-run"
+      --dry-run"
       helm/scripts/helm_deploy_and_wait.sh
   when: manual
   tags:
