@@ -214,6 +214,10 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the mariadb.fullname template
   # name:
 
+podSecurityPolicy: true
+
+rbac: true
+
 ssl:
   enabled: false
   secret: mysql-ssl-certs

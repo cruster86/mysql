@@ -1,0 +1,19 @@
+{{- if .Values.rbac }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "mysql.fullname" . }}-cluster-role-binding
+  labels:
+    app: {{ template "mysql.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+roleRef:
+  kind: ClusterRole
+  name: {{ template "mysql.fullname" . }}-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: {{ template "mysql.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}
