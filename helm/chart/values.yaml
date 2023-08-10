@@ -75,19 +75,20 @@ imagePullSecrets:
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/hostname: kube-postgres-ci-1
 
 ## Affinity
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - kube-postgres-ci-1
+affinity: []
+#  nodeAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      nodeSelectorTerms:
+#      - matchExpressions:
+#        - key: kubernetes.io/hostname
+#          operator: In
+#          values:
+#          - kube-postgres-ci-1
 
 ## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
