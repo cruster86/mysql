@@ -152,11 +152,11 @@ configurationFilesPath: /etc/mysql/conf.d/
 
 # Custom mysql configuration files used to override default mysql settings
 configurationFiles:
-   mysql.cnf: |-
-     [mysqld]
-     bind-address = 0.0.0.0
-     explicit_defaults_for_timestamp = 1
-     skip-grant-tables
+  mysql.cnf: |-
+    [mysqld]
+    bind-address = 0.0.0.0
+    explicit_defaults_for_timestamp = 1
+#    skip-grant-tables
 
 # Custom mysql init SQL files used to initialize the database
 initializationFiles: {}
