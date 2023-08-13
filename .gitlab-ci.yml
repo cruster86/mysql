@@ -14,6 +14,7 @@ mysql:
       CHART="helm/chart/"
       HELM_ARGS="
       -f helm/chart/values.yaml
+      -f "${mysql_root_password}"
       --debug"
       helm/scripts/helm_deploy_and_wait.sh
   when: manual
