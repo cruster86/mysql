@@ -154,7 +154,8 @@ configurationFilesPath: /etc/mysql/conf.d/
 configurationFiles:
    mysql.cnf: |-
      [mysqld]
-     bind-address=0.0.0.0
+     bind-address = 0.0.0.0
+     explicit_defaults_for_timestamp = 1
 
 # Custom mysql init SQL files used to initialize the database
 initializationFiles: {}
