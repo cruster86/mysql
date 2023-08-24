@@ -157,7 +157,7 @@ configurationFiles:
     bind-address = 0.0.0.0
     explicit_defaults_for_timestamp = 1
     plugin-load-add = auth_socket.so
-    skip-grant-tables
+#    skip-grant-tables
 
 # Custom mysql init SQL files used to initialize the database
 initializationFiles: {}
